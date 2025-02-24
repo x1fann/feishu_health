@@ -2,8 +2,8 @@ name: Daily Python Script
 
 on:
   schedule:
-    # 每天 UTC 时间 13.40 点执行（北京时间 21.40 点）
-    - cron: "45 13 * * *"
+    # 每天 UTC 时间 23.00 点执行（北京时间 7.00 点）
+    - cron: "0 23 * * *"
   # 可选：允许手动触发
   workflow_dispatch:
 
