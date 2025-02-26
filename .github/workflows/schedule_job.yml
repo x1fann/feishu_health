@@ -11,6 +11,9 @@ jobs:
   run-script:
     runs-on: ubuntu-latest
     steps:
+      - name: 设置时区为 Asia/Shanghai
+        run: echo "TZ=Asia/Shanghai" >> $GITHUB_ENV
+        
       - name: Checkout code
         uses: actions/checkout@v4
 
