@@ -26,7 +26,7 @@ def read_records(APP_TOKEN, TABLE_ID, params=None):
     if response.status_code == 200:
         return response.json()["data"]["items"]
     else:
-        raise Exception(f"读取失败: {response.text}")
+        raise Exception(f"读取表格失败: {response.text}")
 
 
 records = read_records(APP_TOKEN, TABLE_ID, {"page_size": 20})
@@ -45,31 +45,38 @@ def update_records(APP_TOKEN, TABLE_ID, record_id, fields):
     if response.status_code == 200:
         return response.json()["data"]
     else:
-        raise Exception(f"更新失败: {response.text}")
+        raise Exception(f"更新表格失败: {response.text}")
 
-
-# 获取每日最低温度
-def get_daily_min_temp():
+# 获取气温数据
+def get_temp_for_days():
     weather_api_url = "https://api.open-meteo.com/v1/forecast"
     params = {
         "latitude": 31.2304,  # 上海的纬度
         "longitude": 121.4737,  # 上海的经度
-        "daily": "temperature_2m_min",  # 获取每日最低温度
+        "daily": "temperature_2m_min",  # 获取每日最低气温
         "temperature_unit": "celsius",  # 单位：摄氏度
-        "timezone": "Asia/Shanghai",  # 时区设置
+        "timezone": "Asia/Shanghai",  # 时区设置为上海  
+        "past_days":"1" , # 获取过去一天的天气数据
+        "models":"cma_grapes_global" # 中国气象局模型
     }
     response = requests.get(weather_api_url, params=params)
     if response.status_code == 200:
         data = response.json()
-        return data["daily"]["temperature_2m_min"][0]
+        # 获取今天和昨天的最低气温
+        min_temp_today = data["daily"]["temperature_2m_min"][1]
+        min_temp_yesterday = data["daily"]["temperature_2m_min"][0]
+        return min_temp_today, min_temp_yesterday
     else:
         raise Exception(f"获取天气数据失败: {response.text}")
 
 
-# 新增一行数据到表格
+# 新增数据到表格
 def add_new_record():
-    # 获取今天的最低温度
-    min_temperature = get_daily_min_temp()
+    # 获取最低温度
+    min_temp_today, min_temp_yesterday = get_temp_for_days()
+
+    # 计算昨日温差
+    temp_diff = round(min_temp_today - min_temp_yesterday,1)
 
     today = datetime.today().strftime("%Y-%m-%d")
     today_unix_timestamp = int(datetime.strptime(
@@ -77,7 +84,8 @@ def add_new_record():
 
     fields = {
         "日期": today_unix_timestamp,
-        "最低气温": min_temperature,
+        "最低气温": min_temp_today,
+        "昨日温差": temp_diff
     }
 
     # 使用Feishu表格API新增记录
