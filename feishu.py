@@ -53,7 +53,7 @@ def get_temp_for_days():
     params = {
         "latitude": 31.2304,  # 上海的纬度
         "longitude": 121.4737,  # 上海的经度
-        "daily": "temperature_2m_min",  # 获取每日最低气温
+        "daily": "temperature_2m_min,temperature_2m_max",  # 获取每日最低和最高气温
         "temperature_unit": "celsius",  # 单位：摄氏度
         "timezone": "Asia/Shanghai",  # 时区设置为上海  
         "past_days":"1" , # 获取过去一天的天气数据
@@ -65,18 +65,28 @@ def get_temp_for_days():
         # 获取今天和昨天的最低气温
         min_temp_today = data["daily"]["temperature_2m_min"][1]
         min_temp_yesterday = data["daily"]["temperature_2m_min"][0]
-        return min_temp_today, min_temp_yesterday
+        # 获取今天和昨天的最高气温
+        max_temp_today = data["daily"]["temperature_2m_max"][1]
+        max_temp_yesterday = data["daily"]["temperature_2m_max"][0]
+        return min_temp_today, min_temp_yesterday, max_temp_today, max_temp_yesterday
     else:
         raise Exception(f"获取天气数据失败: {response.text}")
 
 
 # 新增数据到表格
 def add_new_record():
-    # 获取最低温度
-    min_temp_today, min_temp_yesterday = get_temp_for_days()
+    # 获取温度数据
+    min_temp_today, min_temp_yesterday, max_temp_today, max_temp_yesterday = get_temp_for_days()
 
-    # 计算昨日温差
-    temp_diff = round(min_temp_today - min_temp_yesterday,1)
+    # 计算最低温度差值和最高温度差值
+    min_temp_diff = round(min_temp_today - min_temp_yesterday, 1)
+    max_temp_diff = round(max_temp_today - max_temp_yesterday, 1)
+    
+    # 取变化幅度较大的温差
+    if abs(min_temp_diff) >= abs(max_temp_diff):
+        temp_diff = min_temp_diff
+    else:
+        temp_diff = max_temp_diff
 
     today = datetime.today().strftime("%Y-%m-%d")
     today_unix_timestamp = int(datetime.strptime(
