@@ -59,7 +59,9 @@ def get_temp_for_days():
         "temperature_unit": "celsius",  # 单位：摄氏度
         "timezone": "Asia/Shanghai",  # 时区设置为上海  
         "past_days":"1" , # 获取过去一天的天气数据
-        "models":"cma_grapes_global" # 中国气象局模型
+        # 中国气象局模型 cma_grapes_global 
+        # 美国NOAA gfs_seamless
+        "models":"gfs_seamless" 
     }
     response = requests.get(weather_api_url, params=params)
     if response.status_code == 200:
