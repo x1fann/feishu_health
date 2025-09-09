@@ -53,8 +53,8 @@ def get_temp_for_days():
     params = {
         # 上海 31.2304, 121.4737 
         # 杭州 30.2741, 120.1551
-        "latitude": 30.2741,  
-        "longitude": 120.1551,  
+        "latitude": 31.2304,  
+        "longitude": 121.4737,  
         "daily": "temperature_2m_min,temperature_2m_max",  # 获取每日最低和最高气温
         "temperature_unit": "celsius",  # 单位：摄氏度
         "timezone": "Asia/Shanghai",  # 时区设置为上海  
