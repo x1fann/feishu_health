@@ -1,10 +1,11 @@
 import requests
+import os
 from datetime import datetime
 
-APP_ID = "cli_a72e91a3b8f9d013"
-APP_SECRET = "KFPqPHB2p9wf1s9o43CGCAeTbuBJ4xSX"
-APP_TOKEN = "OzOMbiyh5aDjk3socT9c74zsnEf"
-TABLE_ID = "tblOqr0jzSA4HBTb"
+APP_ID = os.environ.get("APP_ID")
+APP_SECRET = os.environ.get("APP_SECRET")
+APP_TOKEN = os.environ.get("APP_TOKEN")
+TABLE_ID = os.environ.get("TABLE_ID")
 
 
 # 获取access_token

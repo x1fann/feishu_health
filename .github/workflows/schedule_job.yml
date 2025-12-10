@@ -28,4 +28,9 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: Run Python script
+        env:
+          APP_ID: ${{ secrets.APP_ID }}
+          APP_SECRET: ${{ secrets.APP_SECRET }}
+          APP_TOKEN: ${{ secrets.APP_TOKEN }}
+          TABLE_ID: ${{ secrets.TABLE_ID }}
         run: python feishu.py  
