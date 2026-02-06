@@ -31,7 +31,7 @@ def read_records(APP_TOKEN, TABLE_ID, params=None):
 
 
 records = read_records(APP_TOKEN, TABLE_ID, {"page_size": 20})
-print(records)
+# print(records)
 
 
 # 更新表格数据
@@ -55,8 +55,8 @@ def get_temp_for_days():
         # 上海 31.2304, 121.4737 
         # 杭州 30.2741, 120.1551
         # 高平 35.7980, 112.9239
-        "latitude": 31.2304,  
-        "longitude": 121.4737,  
+        "latitude": 35.7980,  
+        "longitude": 112.9239,  
         "daily": "temperature_2m_min,temperature_2m_max",  # 获取每日最低和最高气温
         "temperature_unit": "celsius",  # 单位：摄氏度
         "timezone": "Asia/Shanghai",  # 时区设置为上海  
